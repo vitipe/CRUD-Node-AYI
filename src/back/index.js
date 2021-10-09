@@ -5,7 +5,7 @@ import mongoose from 'mongoose';
 // const path = require('path');
 import path from 'path';
 // const Item = require('../model/item');
-import Item from '../model/item';
+import Item from '../back/model/Item.js'; // src\model\Item.js
 
 // Configuración de express:
 const app = express();
@@ -14,7 +14,7 @@ const port = 3000;
 // Middlewares
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));// Así podemos usar req.body
-app.use(express.static('public')); // Ver si acá no tengo que agregar (dirname+"public")
+app.use(express.static(__dirname + '/public')); // Ver si acá no tengo que agregar (dirname+"public"
 app.use(express.static('views'));
 
 // Connect to MongoDB
@@ -31,7 +31,8 @@ mongoose.connect(dbURI)
 
 // Home "/" GET
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, '/views/index.html'));
+  res.sendFile(path.join(__dirname, '/public/index.html'));
+  // console.log('Entraron al / con un GET')
 });
 
 // Items "/items" GET
