@@ -22,9 +22,17 @@ export default function() {
     .then(res => res.json())
     .then(data => {
       setItems(data)
+      setSearchResults(data)
       console.log('GET useEffect')
     })
   }, [evitarRender])
+
+  useEffect(() => {
+    const results = items.filter(item =>
+      item.title.toLowerCase().includes(searchTerm)
+    );
+    setSearchResults(results);
+  }, [searchTerm]);
 
 
   const handleSubmit = (e) => {
@@ -63,6 +71,10 @@ const handleDelete = (idItem) => {
   setEvitarRender(count += 1)
 }
 
+const handleChangeSearch = (e) => {
+  setSearchTerm(e.target.value);
+}
+
 const handleChangeTitle = (e) => {
   setTitleItem(e.target.value);
 }
@@ -86,9 +98,11 @@ const handleChangeDescription = (e) => {
     <div>
     <InputGroup className="mb-3">
       <FormControl
-        placeholder="Filtrar producto"
+        placeholder="Filtrar producto por nombre"
         aria-label="Filtrar producto"
         aria-describedby="basic-addon2"
+        value={searchTerm}
+        onChange={handleChangeSearch}
       />
     </InputGroup>
 
@@ -107,7 +121,7 @@ const handleChangeDescription = (e) => {
       </thead>
       <tbody>
       {
-        items.map((item, i) => {
+        searchResults.map((item, i) => {
           return(
           <tr key={i}>
             <td>{i}</td>
