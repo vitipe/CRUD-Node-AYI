@@ -37,7 +37,7 @@ app.get('/', (req, res) => {
 
 // Items "/items" GET
 app.get('/items', (req, res) => {
-  res.sendFile(path.join(__dirname, '/views/items.html'));
+  res.sendFile(path.join(__dirname, '/public/index.html'));
 });
 
 // GET y POST para api/items
@@ -114,13 +114,13 @@ app.route('/api/items/:id') // así como está anda
     res.send('PUT request to /api/items');
   })
   .delete((req, res) => {
+    console.log(req.params.id)
     Item.deleteOne(
-      { id: req.params.id },
+      { "_id": req.params.id },
     )
       .then(() => { console.log('Se eliminó el elemento con #ID', req.params.id); })
       .catch((error) => console.error(error));
-
-    res.send('DELETE request to /api/items');
+      res.send('request pa DELETE')
   });
 
 // Probando mandar algo a la DB
@@ -162,35 +162,7 @@ app.get('/single-item', (req, res) => {
     });
 });
 
-// Esto es para lo de que devuelva JSON y eso:
-
-/*
-
-app.get("/custom_response", (req, res) => {
-  const type = req.query.param;
-
-  let data = { nombre: "Juan", apellido: "Perez" };
-
-  switch (type) {
-    case "json":
-      data = JSON.stringify(data);
-      res.send(data);
-      break;
-    case "html":
-      data = "<h1>" + data.nombre + " " + data.apellido + "</h1>";
-      res.send(data);
-      break;
-    case "text":
-      console.log("Text Switch");
-      data = data.nombre + " " + data.apellido;
-      res.send(data);
-      break;
-    default:
-      console.log(`No pude hacer nada con ${type}`);
-      res.send(data);
-      break;
-  }
-});
-
-*/
-
+// // 404 por si no hay página
+// app.get('*', function(req, res){
+//   res.status(404).send('<h1>Error 404 - No existe esa página</h1>');
+// });
