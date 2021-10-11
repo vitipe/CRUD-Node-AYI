@@ -14,7 +14,7 @@ app.use(express.static(path.join(__dirname, '/public')));
 app.use(express.static('views'));
 
 // Conectar MongoDB
-const dbURI = 'mongodb+srv://admin:admin@tareanode.wvu7v.mongodb.net/node-AYI?retryWrites=true&w=majority';
+const dbURI = 'mongodb+srv://usuario:usuario@tareanode.wvu7v.mongodb.net/node-AYI?retryWrites=true&w=majority';
 
 mongoose.connect(dbURI)
   .then(() => {
@@ -110,7 +110,7 @@ app.route('/api/items/:id')
     res.send('PUT request to /api/items');
   })
   .delete((req, res) => {
-    console.log(req.params.id)
+    console.log(req.params.id);
     Item.deleteOne(
       { _id: req.params.id },
     )
