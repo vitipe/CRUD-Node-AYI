@@ -1,5 +1,4 @@
 # CRUD-Node-AYI
 ## App finalización capatacitación Node
 
-# Correr
-  'npm install'
+# Correr 'npm install'
