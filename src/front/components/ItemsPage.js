@@ -1,5 +1,5 @@
 import React from 'react';
-import {useEffect, useState} from 'react';
+import { useEffect, useState } from 'react';
 import { InputGroup, FormControl, Button, Table } from 'react-bootstrap'
 import { Form } from 'react-bootstrap';
 
@@ -21,9 +21,8 @@ export default function() {
     fetch('http://localhost:3000/api/items')
     .then(res => res.json())
     .then(data => {
-      setItems(data)
-      setSearchResults(data)
-      console.log('GET useEffect')
+      setItems(data);
+      setSearchResults(data);
     })
   }, [evitarRender])
 
@@ -42,58 +41,56 @@ export default function() {
       headers: {
         "Content-Type" : "application/json"
       },
-      body : JSON.stringify({
-        "title": titleItem,
-        "price": priceItem,
-        "stock": stockItem,
-        "description": descriptionItem
-   })
+      body: JSON.stringify({
+        title: titleItem,
+        price: priceItem,
+        stock: stockItem,
+        description: descriptionItem,
+      })
     })
-    .then(res => res.json())
-    .then(data => {
-      setItems(data)
+      .then(res => res.json())
+      .then(data => {
+        setItems(data);
+      });
+    setEvitarRender(count += 1);
+    setTitleItem('');
+    setPriceItem('');
+    setStockItem('');
+    setDescriptionItem('');
+  };
+
+  const handleDelete = (idItem) => {
+    fetch(`http://localhost:3000/api/items/${idItem}`, {
+      method: 'DELETE',
     })
-    setEvitarRender(count += 1)
-    setTitleItem('')
-    setPriceItem('')
-    setStockItem('')
-    setDescriptionItem('')
-  }
+      .then(res => res.json())
+      .then(data => {
+        setItems(data);
+      });
+    setEvitarRender(count += 1);
+  };
 
-const handleDelete = (idItem) => {
-  fetch(`http://localhost:3000/api/items/${idItem}`, {
-    method: 'DELETE'
-  })
-  .then(res => res.json())
-  .then(data => {
-    setItems(data)
-  })
-  setEvitarRender(count += 1)
-}
+  const handleChangeSearch = (e) => {
+    setSearchTerm(e.target.value);
+  };
 
-const handleChangeSearch = (e) => {
-  setSearchTerm(e.target.value);
-}
+  const handleChangeTitle = (e) => {
+    setTitleItem(e.target.value);
+  };
 
-const handleChangeTitle = (e) => {
-  setTitleItem(e.target.value);
-}
+  const handleChangePrice = (e) => {
+    setPriceItem(e.target.value);
+  };
 
-const handleChangePrice = (e) => {
-  setPriceItem(e.target.value);
-}
+  const handleChangeStock = (e) => {
+    setStockItem(e.target.value);
+  };
 
-const handleChangeStock = (e) => {
-  setStockItem(e.target.value);
-}
+  const handleChangeDescription = (e) => {
+    setDescriptionItem(e.target.value);
+  };
 
-const handleChangeDescription = (e) => {
-  setDescriptionItem(e.target.value);
-}
-
- 
-
-  return(
+  return (
     <>
     <div>
     <InputGroup className="mb-3">
@@ -142,19 +139,19 @@ const handleChangeDescription = (e) => {
     <h3>
       Ingresar un nuevo producto
     </h3>
-    <Form.Group className="mb-3" controlId="formBasicEmail">
+    <Form.Group className="mb-3" controlId="formTitleItem">
       <Form.Label>Nombre del producto:</Form.Label>
       <Form.Control type="text" placeholder="" value={titleItem} onChange={handleChangeTitle}/>
     </Form.Group>
-    <Form.Group className="mb-3" controlId="formBasicEmail">
+    <Form.Group className="mb-3" controlId="formPriceItem">
       <Form.Label>Precio del producto:</Form.Label>
       <Form.Control type="number" placeholder="" value={priceItem} onChange={handleChangePrice}/>
     </Form.Group>
-    <Form.Group className="mb-3" controlId="formBasicEmail">
+    <Form.Group className="mb-3" controlId="formStockItem">
       <Form.Label>Stock del producto:</Form.Label>
       <Form.Control type="number" placeholder="" value={stockItem} onChange={handleChangeStock}/>
     </Form.Group>
-    <Form.Group className="mb-3" controlId="formBasicPassword">
+    <Form.Group className="mb-3" controlId="formDescriptionItem">
       <Form.Label>Descripción del producto</Form.Label>
       <Form.Control type="text" placeholder="" value={descriptionItem} onChange={handleChangeDescription}/>
     </Form.Group>
@@ -163,5 +160,5 @@ const handleChangeDescription = (e) => {
     </Button>
   </Form>
   </>
-  )
+  );
 }

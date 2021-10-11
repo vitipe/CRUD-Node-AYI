@@ -1,11 +1,7 @@
-// const express = require('express');
 import express from 'express';
-// const mongoose = require('mongoose');
 import mongoose from 'mongoose';
-// const path = require('path');
 import path from 'path';
-// const Item = require('../model/item');
-import Item from '../back/model/Item.js'; // src\model\Item.js
+import Item from './model/Item';
 
 // Configuración de express:
 const app = express();
@@ -14,10 +10,10 @@ const port = 3000;
 // Middlewares
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));// Así podemos usar req.body
-app.use(express.static(__dirname + '/public')); // Ver si acá no tengo que agregar (dirname+"public"
+app.use(express.static(path.join(__dirname, '/public')));
 app.use(express.static('views'));
 
-// Connect to MongoDB
+// Conectar MongoDB
 const dbURI = 'mongodb+srv://admin:admin@tareanode.wvu7v.mongodb.net/node-AYI?retryWrites=true&w=majority';
 
 mongoose.connect(dbURI)
@@ -32,7 +28,6 @@ mongoose.connect(dbURI)
 // Home "/" GET
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, '/public/index.html'));
-  // console.log('Entraron al / con un GET')
 });
 
 // Items "/items" GET
@@ -43,7 +38,7 @@ app.get('/items', (req, res) => {
 // GET y POST para api/items
 app.route('/api/items/')
   .get((req, res) => {
-    if (req.query.min && req.query.min) { // Query para precio máximo y mínimo
+    if (req.query.min && req.query.max) {
       Item.find(
         { price: { $gte: req.query.min, $lte: req.query.max } },
       )
@@ -74,21 +69,22 @@ app.route('/api/items/')
     }
   })
   .post((req, res) => {
-    console.log('Se agregó un artículo así: ', req.body);
     const item = new Item(req.body); // así sería creo
+    console.log('Se agregó un elemento a la db: ', req.body);
 
     item.save()
       .then(() => {
-        res.redirect('/items'); // cosa que si envía algo lo vuelva a llevar a la lista de items y vea el item nuevo
+        res.redirect('/items');
       })
       .catch((error) => {
-        console.log(error);
+        console.log('HUBO ERROR', error);
       });
+    res.send('POST request to /api/items');
   });
 
 // Ruteo para api/items/id
-app.route('/api/items/:id') // así como está anda
-  .get((req, res) => { // Para traer un único producto por ID
+app.route('/api/items/:id')
+  .get((req, res) => {
     Item.findById(req.params.id)
       .then((result) => {
         res.send(result);
@@ -98,10 +94,10 @@ app.route('/api/items/:id') // así como está anda
       });
   })
   .put((req, res) => {
-    Item.findOneAndUpdate( // Ver si puedo desestructurar objetos acá?
-      { id: req.params.id },
+    Item.findOneAndUpdate(
+      { _id: req.params.id },
       {
-        $set: { // para que sea por JSON sería tomando el body?
+        $set: {
           title: req.body.title,
           price: req.body.price,
           stock: req.body.stock,
@@ -116,51 +112,12 @@ app.route('/api/items/:id') // así como está anda
   .delete((req, res) => {
     console.log(req.params.id)
     Item.deleteOne(
-      { "_id": req.params.id },
+      { _id: req.params.id },
     )
       .then(() => { console.log('Se eliminó el elemento con #ID', req.params.id); })
       .catch((error) => console.error(error));
-      res.send('request pa DELETE')
+    res.send('request pa DELETE');
   });
-
-// Probando mandar algo a la DB
-app.get('/add-item', (req, res) => {
-  const item = new Item({
-    titulo: 'camisa2',
-    precio: 500,
-  });
-
-  item.save()
-    .then((result) => {
-      res.send(result);
-      console.log('Item enviado a la DB');
-    })
-    .catch((error) => {
-      console.log('HUBO ERROR', error);
-    });
-});
-
-// Para ver todos los items
-app.get('/all-items', (req, res) => {
-  Item.find()
-    .then((result) => {
-      res.send(result);
-    })
-    .catch((error) => {
-      console.log('HUBO ERROR', error);
-    });
-});
-
-// Para ver un solo item
-app.get('/single-item', (req, res) => {
-  Item.findById('615c7704a91c19c0a0e804b1') // el ID del producto que nosotros querramos
-    .then((result) => {
-      res.send(result);
-    })
-    .catch((error) => {
-      console.log('HUBO ERROR', error);
-    });
-});
 
 // // 404 por si no hay página
 // app.get('*', function(req, res){

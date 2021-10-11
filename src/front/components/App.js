@@ -1,54 +1,37 @@
-import React, { useState } from 'react';
+import React from "react";
 import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Link
 } from "react-router-dom";
+import { Navbar, Container, Nav } from 'react-bootstrap';
+import HomePage from './HomePage';
+import ItemsPage from './ItemsPage';
 
-const App = () => {
-  
-  const [usuarios, setUsuarios] = useState([]);
-
-  const hacerPedidoGet = () => {
-    fetch('http://localhost:3000/usuarios')
-    .then(res => res.json())
-    .then(data => setUsuarios(data))
-  }
-  
-  const guardarNombre = (e) => {
-    setNombre(e.target.value)
-  }
-
-  const enviarDataPorPost = () => {
-    fetch('http://localhost:3000/usuarios', {
-      method: "POST",
-      headers: {
-        "Content-Type" : "application/json"
-      },
-      body : JSON.stringify({nombre})
-    })
-    .then(res => res.json())
-    .then(data => setUsuarios(data))
-  }
-
+export default function App() {
   return (
-    <>
-    <div>
-      <input type="text" placeholder="nombre"></input>
-      <button onClick={guardarNombre}>Enviar usuario</button>
-    </div>
-    <button onClick={hacerPedidoGet}>GET</button>
-    <ul>
-      {
-        usuarios.length 
-        ? usuarios.map(usuario => <li>{usuarios.nombre}</li>)
-        : <li>No hay usuarios</li>
-      }
-    </ul>
-    </>
-  )
+    <Router>
+      <div>
+        <Navbar bg="dark" variant="dark">
+        <Container>
+          <Navbar.Brand href="#home">AYI-Node-CRUD</Navbar.Brand>
+          <Nav className="me-auto">
+          <Nav.Link href="/">Home</Nav.Link>
+          <Nav.Link href="/items">Items</Nav.Link>
+          <Nav.Link href="/api/items">API</Nav.Link>
+          </Nav>
+        </Container>
+      </Navbar>
+
+        <Switch>
+          <Route path="/items">
+            <ItemsPage />
+          </Route>
+          <Route path="/">
+            <HomePage />
+          </Route>
+        </Switch>
+      </div>
+    </Router>
+  );
 }
-
-export default App;
-
