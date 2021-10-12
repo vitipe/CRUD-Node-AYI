@@ -9,12 +9,12 @@ const port = 3000;
 
 // Middlewares
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));// Así podemos usar req.body
+app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, '/public')));
 app.use(express.static('views'));
 
-// Conectar MongoDB
-const dbURI = 'mongodb+srv://usuario:usuario@tareanode.wvu7v.mongodb.net/node-AYI?retryWrites=true&w=majority';
+// Conectar MongoDB, usar u:"admin" p:"admin"
+const dbURI = 'mongodb+srv://usuario:pass@tareanode.wvu7v.mongodb.net/node-AYI?retryWrites=true&w=majority';
 
 mongoose.connect(dbURI)
   .then(() => {
@@ -69,7 +69,7 @@ app.route('/api/items/')
     }
   })
   .post((req, res) => {
-    const item = new Item(req.body); // así sería creo
+    const item = new Item(req.body);
     console.log('Se agregó un elemento a la db: ', req.body);
 
     item.save()

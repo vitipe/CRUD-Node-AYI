@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { InputGroup, FormControl, Button, Table, Form } from 'react-bootstrap'
+import { InputGroup, FormControl, Button, Table, Form } from 'react-bootstrap';
 
+// Utilizado para evitar el infinite loop del fetch de useEffect
 let count = 0;
 
 export default function() {
