@@ -1,7 +1,5 @@
-import React from 'react';
-import { useEffect, useState } from 'react';
-import { InputGroup, FormControl, Button, Table } from 'react-bootstrap'
-import { Form } from 'react-bootstrap';
+import React, { useState, useEffect } from 'react';
+import { InputGroup, FormControl, Button, Table, Form } from 'react-bootstrap'
 
 let count = 0;
 
